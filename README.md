@@ -1,6 +1,6 @@
 # Twiga Trails Safaris: Power BI Dashboard
 
-A Power BI project for **Twiga Trails Safaris**, a fictional Nairobi safari operator. I turned raw booking files (messy, duplicated and inconsistent) into a clean star-schema model, validated DAX measures and a 7-page interactive report. The aim was to give the CEO one trusted report instead of conflicting spreadsheets.
+A Power BI project for **Twiga Trails Safaris**, a Nairobi safari operator. I turned raw booking files (messy, duplicated and inconsistent) into a clean star-schema model, validated DAX measures and a 7-page interactive report. The aim was to give the CEO one trusted report instead of conflicting spreadsheets.
 
 Built for the [LuxDevHQ Power BI Safari Workshop](https://github.com/LuxDevHQ/Data/tree/main/powerbi-safari-workshop). The source data is in that repository, not this one.
 
@@ -80,25 +80,25 @@ Central fact table `Bookings`, surrounded by `Customers`, `Packages`, `Agents`, 
 ## Screenshots
 
 ### Executive Overview
-![Executive Overview](Screenshots/01-executive-overview.png)
+![Executive Overview](Screenshots/Executive%20Overview.png)
 
 ### Seasonality & Demand
-![Seasonality & Demand](Screenshots/02-seasonality-demand.png)
+![Seasonality and Demand](Screenshots/Seasonality%20%26%20Demand.png)
 
 ### Channels & Customers
-![Channels & Customers](Screenshots/03-channels-customers.png)
+![Channels and Customers](Screenshots/Channels%20%26%20Customers.png)
 
 ### Packages & Parks
-![Packages & Parks](Screenshots/04-packages-parks.png)
+![Packages and Parks](Screenshots/Packages%20%26%20Parks.png)
 
 ### Guest Experience
-![Guest Experience](Screenshots/05-guest-experience.png)
+![Guest Experience](Screenshots/Guest%20Experience.png)
 
 ### Package Detail (drill-through)
-![Package Detail](Screenshots/06-package-detail.png)
+![Package Detail](Screenshots/Package%20Detail.png)
 
 ### Package Snapshot (tooltip)
-![Package Snapshot](Screenshots/07-package-snapshot.png)
+![Package Snapshot](Screenshots/Package%20Snapshot.png)
 
 ## Headline Results (2023 to 2025)
 
