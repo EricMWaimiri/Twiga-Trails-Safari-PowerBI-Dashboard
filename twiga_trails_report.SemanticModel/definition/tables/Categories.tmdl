@@ -1,0 +1,17 @@
+table Categories
+	lineageTag: f82aacfb-769a-4d17-a91d-9234d4368176
+
+	column Category
+		lineageTag: a9079efe-5e75-4fe0-a4eb-ba49d948cc30
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Packages[Category]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Categories = calculated
+		mode: import
+		source = DISTINCT(Packages[Category])
+
+	annotation PBI_Id = 01f0b70471cc40e08f39da2fdd033639
+

@@ -1,0 +1,51 @@
+table 'Metric Selector'
+	isHidden
+	lineageTag: 96a95226-288a-49ba-9007-d5b3854a7bb5
+
+	column 'Metric Selector'
+		isHidden
+		lineageTag: 76080dae-07f8-4933-b5d5-85f21cffbeb9
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Selector Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Selector Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selector Fields'
+		isHidden
+		lineageTag: a9073789-9bcd-41b0-8baf-3bee866a5035
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Selector Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selector Order'
+		isHidden
+		formatString: 0
+		lineageTag: 3dc8fbd0-585a-4912-93fe-749e77fcfc76
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Metric Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Net Revenue", NAMEOF('_Measures'[Net Revenue]), 0),
+				    ("Gross Profit", NAMEOF('_Measures'[Gross Profit]), 1),
+				    ("Travellers", NAMEOF('_Measures'[Travellers]), 2)
+				}
+
+	annotation PBI_Id = 3a76530f14e24bd4b3f2327fd85ad2f7
+

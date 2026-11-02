@@ -1,0 +1,45 @@
+relationship AutoDetected_c1d4889a-9dd5-4f41-b964-8ef4b915bd9b
+	fromColumn: Bookings.PackageID
+	toColumn: Packages.PackageID
+
+relationship be2c0b31-714e-9087-ba0a-198a5c3ab0cc
+	fromColumn: Bookings.BookingDate
+	toColumn: Date.Date
+
+relationship adf077d6-31a4-a058-38d3-558c389143dc
+	isActive: false
+	fromColumn: Bookings.TravelStartDate
+	toColumn: Date.Date
+
+relationship AutoDetected_a60b45e1-1590-457d-ac36-9bb7e10df38a
+	fromColumn: Bookings.CustomerID
+	toColumn: Customers.CustomerID
+
+relationship 9cd8948e-79e0-0443-9e56-278b3eeb2f93
+	fromColumn: Bookings.AgentID
+	toColumn: Agents.AgentID
+
+relationship 48ce638b-fcae-88fd-f4d8-75b15e7d6956
+	fromColumn: Customers.Country
+	toColumn: Regions.Country
+
+relationship 9e22040f-240e-022f-f694-2247831d53b1
+	fromColumn: Packages.PrimaryParkID
+	toColumn: Parks.ParkID
+
+relationship 17dd0715-8bb2-840a-fca3-8a502e339a82
+	fromColumn: Targets.MonthStart
+	toColumn: Date.Date
+
+relationship 839dc832-42d9-72b0-d768-78698df54161
+	fromColumn: Packages.Category
+	toColumn: Categories.Category
+
+relationship 4e1bf54a-c3fb-f1c7-f386-b088bb8f613b
+	fromColumn: Targets.Category
+	toColumn: Categories.Category
+
+relationship cdebbf22-d3c0-05c2-3c74-531a1f5646c6
+	fromColumn: Reviews.BookingID
+	toColumn: Bookings.BookingID
+

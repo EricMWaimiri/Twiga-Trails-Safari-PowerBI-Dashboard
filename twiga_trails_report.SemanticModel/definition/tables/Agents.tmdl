@@ -1,0 +1,57 @@
+table Agents
+	lineageTag: 8640089a-e9c2-41a4-ba4b-4f3f6f22cadd
+
+	column AgentID
+		dataType: string
+		lineageTag: bc9481b9-a3a9-4329-a826-a470eea35e47
+		summarizeBy: none
+		sourceColumn: AgentID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AgentName
+		dataType: string
+		lineageTag: 4587c5f5-80e9-4b99-85f8-87d5862cbc70
+		summarizeBy: none
+		sourceColumn: AgentName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel
+		dataType: string
+		lineageTag: 47d60af0-9f55-478a-8876-9ca74e8a35e3
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column BaseCountry
+		dataType: string
+		lineageTag: 9326c2dc-a941-4019-8664-898262281937
+		summarizeBy: none
+		sourceColumn: BaseCountry
+
+		annotation SummarizationSetBy = Automatic
+
+	column CommissionPct
+		dataType: double
+		lineageTag: 4c654beb-c51e-47ac-a44d-5502c5ca7f68
+		summarizeBy: none
+		sourceColumn: CommissionPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Agents = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Agents.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"AgentID", type text}, {"AgentName", type text}, {"Channel", type text}, {"BaseCountry", type text}, {"CommissionPct", type number}}, "en-US")
+				in
+				    ChangedTypes
+
+	annotation PBI_ResultType = Table
+

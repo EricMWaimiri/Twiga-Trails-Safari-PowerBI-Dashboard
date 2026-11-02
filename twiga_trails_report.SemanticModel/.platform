@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "twiga_trails_report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "795c7c46-876e-4634-9d91-9142c24465e6"
+  }
+}

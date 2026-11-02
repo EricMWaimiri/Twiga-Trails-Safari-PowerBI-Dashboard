@@ -1,0 +1,192 @@
+table Bookings
+	lineageTag: 5db113c8-568a-4a15-a0cd-261116c4e684
+
+	column BookingID
+		dataType: string
+		lineageTag: e2b58cfc-6353-4bd1-ae7b-880e489389b0
+		summarizeBy: none
+		sourceColumn: BookingID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BookingDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2db7e72e-0099-4b1d-a322-c0cf5cbe8e33
+		summarizeBy: none
+		sourceColumn: BookingDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TravelStartDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 553c99ee-bd15-4e18-bbef-2477bebf9a10
+		summarizeBy: none
+		sourceColumn: TravelStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerID
+		dataType: string
+		lineageTag: ecda2607-3852-4609-924d-5358528c6673
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PackageID
+		dataType: string
+		lineageTag: 7233830c-93a9-4165-9ba7-366e3935d450
+		summarizeBy: none
+		sourceColumn: PackageID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AgentID
+		dataType: string
+		lineageTag: d1943700-1b7f-45e0-a6ef-fafe21acb541
+		summarizeBy: none
+		sourceColumn: AgentID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Adults
+		dataType: int64
+		formatString: 0
+		lineageTag: 92a52826-ee0e-41c0-b970-c5380f50c7a0
+		summarizeBy: sum
+		sourceColumn: Adults
+
+		annotation SummarizationSetBy = Automatic
+
+	column Children
+		dataType: int64
+		formatString: 0
+		lineageTag: 3fdca3d1-2108-409c-b785-5b72c7879504
+		summarizeBy: sum
+		sourceColumn: Children
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPriceUSD
+		dataType: double
+		formatString: 0.00
+		lineageTag: d453592f-22f9-422e-b7ea-af52f2baffdc
+		summarizeBy: sum
+		sourceColumn: UnitPriceUSD
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPct
+		dataType: double
+		lineageTag: 341b7477-863c-4965-b709-f83248885821
+		summarizeBy: sum
+		sourceColumn: DiscountPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Status
+		dataType: string
+		lineageTag: 64e41534-1af1-46a8-bad8-9d6971bc8498
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentMethod
+		dataType: string
+		lineageTag: 3c3e6ce0-ccc8-43f9-a0fd-f4b9cbdf20b3
+		summarizeBy: none
+		sourceColumn: PaymentMethod
+
+		annotation SummarizationSetBy = Automatic
+
+	column Travellers
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d59bdf6-4b49-4fe1-a7c1-6db3d7ce66ac
+		summarizeBy: sum
+		sourceColumn: Travellers
+
+		annotation SummarizationSetBy = Automatic
+
+	column NetAmountUSD
+		dataType: double
+		formatString: 0.00
+		lineageTag: e8312904-7f93-419a-94ce-71869dc7f0d4
+		summarizeBy: sum
+		sourceColumn: NetAmountUSD
+
+		annotation SummarizationSetBy = Automatic
+
+	column LeadTimeDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 06e4adac-f3cc-45e1-bb8e-50ccb08fca30
+		summarizeBy: sum
+		sourceColumn: LeadTimeDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Bookings' = DISTINCTCOUNT(Bookings[BookingID])
+		formatString: 0
+		lineageTag: 16c833dd-76b7-45cf-acf7-f4b50c8bb0fd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceFile
+		dataType: string
+		lineageTag: 8f34d31d-9206-42bb-b80b-dfd1a67dc0dc
+		summarizeBy: none
+		sourceColumn: SourceFile
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Bookings = m
+		mode: import
+		source =
+				let
+				    Source = Folder.Files(DataFolder & "Bookings"),
+				    CsvOnly = Table.SelectRows(Source, each Text.Lower([Extension]) = ".csv" and [Attributes]?[Hidden]? <> true),
+				    Parsed = Table.AddColumn(CsvOnly, "Data", each Table.PromoteHeaders(
+				        Csv.Document([Content], [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				        [PromoteAllScalars = true]
+				    )),
+				    Kept = Table.SelectColumns(Parsed, {"Name", "Data"}),
+				    Expanded = Table.ExpandTableColumn(Kept, "Data", {
+				        "BookingID", "BookingDate", "TravelStartDate", "CustomerID", "PackageID", "AgentID",
+				        "Adults", "Children", "UnitPriceUSD", "DiscountPct", "Status", "PaymentMethod"
+				    }),
+				    Renamed = Table.RenameColumns(Expanded, {{"Name", "SourceFile"}}),
+				    Typed = Table.TransformColumnTypes(Renamed, {
+				        {"SourceFile", type text}, {"BookingID", type text}, {"BookingDate", type date},
+				        {"TravelStartDate", type date}, {"CustomerID", type text}, {"PackageID", type text},
+				        {"AgentID", type text}, {"Adults", Int64.Type}, {"Children", Int64.Type},
+				        {"UnitPriceUSD", type number}, {"DiscountPct", type number}, {"Status", type text},
+				        {"PaymentMethod", type text}
+				    }, "en-US"),
+				    RemovedDuplicates = Table.Distinct(Typed, {"BookingID"}),
+				    StatusTidy = Table.TransformColumns(RemovedDuplicates, {{"Status", each Text.Proper(Text.Trim(_)), type text}}),
+				    StatusFixed = Table.ReplaceValue(StatusTidy, "Canceled", "Cancelled", Replacer.ReplaceValue, {"Status"}),
+				    DiscountFixed = Table.ReplaceValue(StatusFixed, null, 0, Replacer.ReplaceValue, {"DiscountPct"}),
+				    AgentFixed = Table.TransformColumns(DiscountFixed, {
+				        {"AgentID", each if _ = null or _ = "" then "AG00" else _, type text}
+				    }),
+				    AddedTravellers = Table.AddColumn(AgentFixed, "Travellers", each [Adults] + [Children], Int64.Type),
+				    AddedNetAmount = Table.AddColumn(AddedTravellers, "NetAmountUSD", each
+				        ([Adults] + 0.5 * [Children]) * [UnitPriceUSD] * (1 - [DiscountPct]), type number),
+				    AddedLeadTime = Table.AddColumn(AddedNetAmount, "LeadTimeDays", each
+				        Duration.Days([TravelStartDate] - [BookingDate]), Int64.Type)
+				in
+				    AddedLeadTime
+
+	annotation PBI_ResultType = Table
+

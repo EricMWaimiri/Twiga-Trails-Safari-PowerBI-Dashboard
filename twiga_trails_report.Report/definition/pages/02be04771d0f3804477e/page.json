@@ -1,0 +1,9 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "02be04771d0f3804477e",
+  "displayName": "Package Snapshot",
+  "displayOption": "ActualSize",
+  "height": 300,
+  "width": 400,
+  "type": "Tooltip"
+}

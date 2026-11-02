@@ -1,0 +1,9 @@
+expression DataFolder =
+		let
+		       Source = "C:\Users\Admin\Desktop\SCHOOL STUFF\Power BI\Twiga Trails Safaris\Data\" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text]
+		   in
+		       Source
+	lineageTag: 1b2c8226-2d00-40a8-8310-51aba8cbb9ea
+
+	annotation PBI_ResultType = Text
+

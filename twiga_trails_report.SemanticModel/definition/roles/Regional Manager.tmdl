@@ -1,0 +1,7 @@
+role 'Regional Manager'
+	modelPermission: read
+
+	tablePermission Regions = [ManagerEmail] = USERPRINCIPALNAME()
+
+	annotation PBI_Id = 377a49ec0523452284e26363f0b05818
+

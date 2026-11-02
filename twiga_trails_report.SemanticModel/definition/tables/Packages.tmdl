@@ -1,0 +1,85 @@
+table Packages
+	lineageTag: c96d9f62-547b-4d97-8e63-b19c0e68b82f
+
+	column PackageID
+		dataType: string
+		lineageTag: c9e6161e-783f-41ba-8292-7c8f61871150
+		summarizeBy: none
+		sourceColumn: PackageID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PackageName
+		dataType: string
+		lineageTag: 48395355-a3f9-4a8a-90cd-21f3214d1f93
+		summarizeBy: none
+		sourceColumn: PackageName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 6d19cb11-8a35-492c-a433-3a8d9acc6968
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column DurationDays
+		dataType: int64
+		formatString: 0
+		lineageTag: e7a0a66e-bccc-4c8b-895b-555580d3cc8f
+		summarizeBy: sum
+		sourceColumn: DurationDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrimaryParkID
+		dataType: string
+		lineageTag: 258fd7db-58cc-4276-b0b4-c32dedb5c41e
+		summarizeBy: none
+		sourceColumn: PrimaryParkID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BasePriceUSD
+		dataType: double
+		formatString: 0
+		lineageTag: 0634df5a-51bc-487f-b90d-1ac7f7427477
+		summarizeBy: sum
+		sourceColumn: BasePriceUSD
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostPerPaxUSD
+		dataType: double
+		formatString: 0
+		lineageTag: 6b4bdb7c-0932-41c3-9990-5b7a9e6dafac
+		summarizeBy: sum
+		sourceColumn: CostPerPaxUSD
+
+		annotation SummarizationSetBy = Automatic
+
+	column LaunchDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c8641275-51b3-4f61-ab4a-9ddc39903a2a
+		summarizeBy: none
+		sourceColumn: LaunchDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Packages = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Packages.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"PackageID", type text}, {"PackageName", type text}, {"Category", type text}, {"DurationDays", Int64.Type}, {"PrimaryParkID", type text}, {"BasePriceUSD", type number}, {"CostPerPaxUSD", type number}, {"LaunchDate", type date}}, "en-US")
+				in
+				    ChangedTypes
+
+	annotation PBI_ResultType = Table
+

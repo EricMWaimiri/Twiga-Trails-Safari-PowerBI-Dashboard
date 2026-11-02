@@ -1,0 +1,76 @@
+table Parks
+	lineageTag: f32e3a6c-3195-4e6e-afb2-5a474b29cbd1
+
+	column ParkID
+		dataType: string
+		lineageTag: 94c9cc43-d4fc-4685-af0b-350e4228180f
+		summarizeBy: none
+		sourceColumn: ParkID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParkName
+		dataType: string
+		lineageTag: 9a974260-d6eb-4299-8a4e-f1548022066b
+		summarizeBy: none
+		sourceColumn: ParkName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 856ff7a9-42f9-4dd0-9361-ad2afd266826
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitude
+		dataType: double
+		lineageTag: cdc28715-1097-4529-9f14-e2b3997f5684
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitude
+		dataType: double
+		lineageTag: 90da1816-f293-4e54-a16e-135858632814
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Ecosystem
+		dataType: string
+		lineageTag: 5f01f432-2e2f-42d2-9254-851c7430435c
+		summarizeBy: none
+		sourceColumn: Ecosystem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParkFeeUSDPerDay
+		dataType: double
+		formatString: 0
+		lineageTag: abaabc33-8af3-4dc3-b5ed-39a001009cf7
+		summarizeBy: none
+		sourceColumn: ParkFeeUSDPerDay
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Parks = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Parks.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"ParkID", type text}, {"ParkName", type text}, {"Country", type text}, {"Latitude", type number}, {"Longitude", type number}, {"Ecosystem", type text}, {"ParkFeeUSDPerDay", type number}}, "en-US")
+				in
+				    ChangedTypes
+
+	annotation PBI_ResultType = Table
+

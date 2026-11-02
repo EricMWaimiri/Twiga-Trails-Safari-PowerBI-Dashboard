@@ -1,0 +1,80 @@
+table Date
+	lineageTag: 281e8c6c-cc53-415d-8a69-99cf4c0bcb7d
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 622ebe5a-171f-4aaf-a2da-ec7c21ba975c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 67e3368f-5d31-4179-8d81-faab255d341e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month No'
+		isHidden
+		formatString: 0
+		lineageTag: afa5e4ba-3ea0-4b67-b3fd-f541f9b1fea9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Month No]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		lineageTag: 982231a6-cd60-45b7-97e2-4e36143a9a7d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+		sortByColumn: 'Month No'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year-Month
+		lineageTag: b51b9823-0113-455d-95f2-ec202209a56c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year-Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Season =
+			SWITCH(TRUE(), 'Date'[Month No] IN {7, 8, 9, 10}, "Migration Peak",
+			'Date'[Month No] IN {12, 1}, "Festive Peak",
+			'Date'[Month No] IN {4, 5}, "Long Rains",
+			"Shoulder")
+		lineageTag: 7b877ffd-57ba-4a26-9379-ca70649beb1f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter = "Q" & ROUNDUP(MONTH('Date'[Date]) / 3, 0)
+		lineageTag: 8923e331-4154-4c6a-9e21-991080e8dbcb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS (
+				    CALENDAR ( DATE (2023, 1, 1), DATE (2026, 12, 31) ),
+				    "Year", YEAR ( [Date] ),
+				    "Month No", MONTH ( [Date] ),
+				    "Month", FORMAT ( [Date], "mmm" ),
+				    "Year-Month", FORMAT ( [Date], "yyyy-mm" )
+				)
+
+	annotation PBI_Id = fad3041282ae4c50a860df5c6f3404a6
+

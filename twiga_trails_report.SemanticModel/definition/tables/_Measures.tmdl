@@ -1,0 +1,131 @@
+table _Measures
+	lineageTag: 961b8764-76ae-4f86-9e4f-887332e1b953
+
+	measure Bookings = COUNTROWS(Bookings)
+		formatString: 0
+		lineageTag: 4e306be5-3577-4ede-9b38-70e93cf0bc01
+
+	measure 'Cancelled Bookings' = CALCULATE([Bookings], Bookings[Status] = "Cancelled")
+		formatString: 0
+		lineageTag: 9e2533b5-3f2b-466b-b43d-b7f00f518377
+
+	measure 'Cancellation Rate' = DIVIDE([Cancelled Bookings], [Bookings])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 05b168c3-130c-41f3-94bb-59d139f494d7
+
+	measure 'Net Revenue' = CALCULATE(SUM(Bookings[NetAmountUSD]), Bookings[Status] <> "Cancelled")
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 85d07171-907f-41f3-ae49-be7613782fc1
+
+	measure Travellers = CALCULATE(SUM(Bookings[Travellers]), Bookings[Status] <> "Cancelled")
+		formatString: 0
+		lineageTag: 7c384d38-eaf3-4aff-b08b-ab936075ec3e
+
+	measure 'Revenue LY' = CALCULATE([Net Revenue], SAMEPERIODLASTYEAR('Date'[Date]))
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: d77c7f60-c51e-4d29-80df-89897619f25c
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Revenue YoY %' = DIVIDE([Net Revenue] - [Revenue LY], [Revenue LY])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 338e27ea-ddc9-4d2b-b832-05b2bb4d12b6
+
+	measure 'Revenue Target' = SUM(Targets[TargetRevenueUSD])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: f5a05c30-6759-4877-a6db-3d3e8beaa32f
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Target Variance %' = DIVIDE([Net Revenue] - [Revenue Target], [Revenue Target])
+		lineageTag: c141db37-692a-40cb-8d26-137376df6b8b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue By Travel Date' = CALCULATE([Net Revenue], USERELATIONSHIP(Bookings[TravelStartDate], 'Date'[Date]))
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: a6102a0f-0602-493f-8cd3-8f4970625dd3
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Travellers By Travel Date' = CALCULATE([Travellers], USERELATIONSHIP(Bookings[TravelStartDate], 'Date'[Date]))
+		formatString: 0
+		lineageTag: 70a419ef-5272-4b3d-abf0-ad24b0496069
+
+	measure 'Avg Lead Time (days)' = AVERAGE(Bookings[LeadTimeDays])
+		formatString: 0
+		lineageTag: 0ecbd354-f2c9-4469-8e0e-e8959a5502b6
+
+	measure Commission = CALCULATE(SUMX(Bookings, Bookings[NetAmountUSD] * RELATED(Agents[CommissionPct])), Bookings[Status] <> "Cancelled")
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: cc15b8ce-a6f9-472b-a0f5-a3e7a2af62b1
+
+	measure 'Tour Cost' = CALCULATE(SUMX(Bookings, Bookings[Travellers] * RELATED(Packages[CostPerPaxUSD])), Bookings[Status] <> "Cancelled")
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 0264a916-d4eb-448c-a759-067dd7b70ee3
+
+	measure 'Gross Profit' = [Net Revenue] - [Tour Cost] - [Commission]
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 08c9a630-60a4-40ef-9bd7-b0f297a91147
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Net Revenue])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c2d7eafc-77c3-48da-803c-102029803ae7
+
+	measure 'Avg Booking Value' = DIVIDE([Net Revenue], [Bookings] - [Cancelled Bookings])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 1080ed1a-4528-4497-a6b7-f235a9cb5c40
+
+	measure 'Avg Rating' = AVERAGE(Reviews[Rating])
+		formatString: 0.0
+		lineageTag: 85280a95-b2d9-48a8-bade-6891670b0cad
+
+	measure NPS = VAR Responses = COUNTROWS(Reviews) VAR Promoters = CALCULATE(COUNTROWS(Reviews), Reviews[NPSScore] >= 9) VAR Detractors = CALCULATE(COUNTROWS(Reviews), Reviews[NPSScore] <= 6) RETURN DIVIDE(Promoters - Detractors, Responses) * 100
+		formatString: 0.0
+		lineageTag: d487a2de-b8b6-420d-b20e-8a68af62ede7
+
+	measure 'Package Rank' = RANKX ( ALL ( Packages[PackageName] ), [Net Revenue] )
+		formatString: 0
+		lineageTag: 8973e29e-aa1c-4235-ab0b-8ba5b5d141d7
+
+	measure 'Avg Rating by Travel Date' = CALCULATE ([Avg Rating], USERELATIONSHIP (Bookings[TravelStartDate], 'Date'[Date]))
+		lineageTag: 0f8024c9-319c-4d06-aa5f-08bbc8f82450
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Review Count' = COUNTROWS(Reviews)
+		formatString: 0
+		lineageTag: 38a5a21b-6e24-4207-9425-ecc70ab03c6b
+
+	measure 'Revenue YTD' = CALCULATE([Net Revenue], DATESYTD('Date'[Date]))
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 1d1d0b34-4826-4329-88e4-cde380893b5a
+
+	measure 'Revenue Rolling 3M' = CALCULATE([Net Revenue], DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -3, MONTH))
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: f3aa4377-7859-4016-9259-b60ca5dc8d11
+
+	measure 'Selected Package' = SELECTEDVALUE(Packages[PackageName], "All packages")
+		lineageTag: 6a5d6ac0-df40-4b6f-82a9-45695523adc2
+
+	column Column1
+		dataType: string
+		isHidden
+		lineageTag: 5fb13772-ef70-470e-8090-c7ac1ce12d88
+		summarizeBy: none
+		sourceColumn: Column1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				  Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t])
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

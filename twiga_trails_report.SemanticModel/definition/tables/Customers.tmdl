@@ -1,0 +1,100 @@
+table Customers
+	lineageTag: 51be84f5-4d3e-41e4-9b05-ad6412521b89
+
+	column CustomerID
+		dataType: string
+		lineageTag: ddb0eea8-cc69-4012-8ba4-6ae1edef76b1
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstName
+		dataType: string
+		lineageTag: d2448b9b-6326-4955-86f0-ce2d852adb77
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastName
+		dataType: string
+		lineageTag: c5ccf176-9556-4ef1-bba0-dae2657fc9f1
+		summarizeBy: none
+		sourceColumn: LastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 16d24fd5-ebee-46bd-a529-ca298483bc51
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 60e36b73-9f0a-475a-9fe6-561e2de741ce
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column AgeBand
+		dataType: string
+		lineageTag: 85bdf22c-9bd1-43ae-8f43-3de021bfa59f
+		summarizeBy: none
+		sourceColumn: AgeBand
+
+		annotation SummarizationSetBy = Automatic
+
+	column JoinDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2620c58d-92c8-4d4e-806c-708a162a951f
+		summarizeBy: none
+		sourceColumn: JoinDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column FullName
+		dataType: string
+		lineageTag: a9c4b84d-ecd9-49ab-90f3-0645786bfc38
+		summarizeBy: none
+		sourceColumn: FullName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customers = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(DataFolder & "Customers.xlsx"), null, true),
+				    Sheet = Source{[Item = "Customers", Kind = "Sheet"]}[Data],
+				    SkippedTitleRows = Table.Skip(Sheet, 2),
+				    PromotedHeaders = Table.PromoteHeaders(SkippedTitleRows, [PromoteAllScalars = true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {
+				        {"CustomerID", type text}, {"FirstName", type text}, {"LastName", type text},
+				        {"Country", type text}, {"Segment", type text}, {"AgeBand", type text},
+				        {"JoinDate", type date}
+				    }, "en-US"),
+				    TrimmedCountry = Table.TransformColumns(ChangedTypes, {{"Country", Text.Trim, type text}}),
+				    CountryFixes = {
+				        {"USA", "United States"}, {"U.S.A.", "United States"}, {"usa", "United States"},
+				        {"United States of America", "United States"},
+				        {"UK", "United Kingdom"}, {"U.K.", "United Kingdom"},
+				        {"Great Britain", "United Kingdom"}, {"UAE", "United Arab Emirates"},
+				        {"The Netherlands", "Netherlands"}, {"Holland", "Netherlands"},
+				        {"germany", "Germany"}, {"Deutschland", "Germany"}
+				    },
+				    StandardisedCountry = List.Accumulate(CountryFixes, TrimmedCountry, (TableState, Pair) =>
+				        Table.ReplaceValue(TableState, Pair{0}, Pair{1}, Replacer.ReplaceValue, {"Country"})),
+				    AddedFullName = Table.AddColumn(StandardisedCountry, "FullName", each [FirstName] & " " & [LastName], type text)
+				in
+				    AddedFullName
+
+	annotation PBI_ResultType = Table
+

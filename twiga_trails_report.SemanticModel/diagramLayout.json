@@ -1,0 +1,189 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 647.50769388945,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 295.94676806603695,
+            "y": 107.77756016018742
+          },
+          "nodeIndex": "Agents",
+          "nodeLineageTag": "8640089a-e9c2-41a4-ba4b-4f3f6f22cadd",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 397.21453543465839,
+            "y": 606.070718614979
+          },
+          "nodeIndex": "Packages",
+          "nodeLineageTag": "c96d9f62-547b-4d97-8e63-b19c0e68b82f",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 87.75
+          },
+          "nodeIndex": "Parks",
+          "nodeLineageTag": "f32e3a6c-3195-4e6e-afb2-5a474b29cbd1",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 111.75
+          },
+          "nodeIndex": "Regions",
+          "nodeLineageTag": "866c33c1-08dc-451c-b78d-90b9557b0976",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1136,
+            "y": 99.75
+          },
+          "nodeIndex": "Reviews",
+          "nodeLineageTag": "8a52c599-2e24-42f8-999e-55f4f705a672",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1420,
+            "y": 135.75
+          },
+          "nodeIndex": "Targets",
+          "nodeLineageTag": "2d537fad-3f6e-4f45-9bbb-c3c32b929926",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 923.41557147682875,
+            "y": 476.86996326041424
+          },
+          "nodeIndex": "Bookings",
+          "nodeLineageTag": "5db113c8-568a-4a15-a0cd-261116c4e684",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1266.972720527418,
+            "y": 735.25769388945
+          },
+          "nodeIndex": "Customers",
+          "nodeLineageTag": "51be84f5-4d3e-41e4-9b05-ad6412521b89",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1742.3118808889653,
+            "y": 125.653539439344
+          },
+          "nodeIndex": "Categories",
+          "nodeLineageTag": "f82aacfb-769a-4d17-a91d-9234d4368176",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1730.3651128229285,
+            "y": 457.503846944725
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "961b8764-76ae-4f86-9e4f-887332e1b953",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1455.6930614651149,
+            "y": 433.51762702481869
+          },
+          "nodeIndex": "Date",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1730.3651128229285,
+            "y": 420.503846944725
+          },
+          "nodeIndex": "Metric Selector",
+          "nodeLineageTag": "96a95226-288a-49ba-9007-d5b3854a7bb5",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1730.3651128229285,
+            "y": 377.003846944725
+          },
+          "nodeIndex": "_Roles",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 50.346892102823183,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

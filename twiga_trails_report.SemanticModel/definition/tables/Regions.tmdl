@@ -1,0 +1,55 @@
+table Regions
+	lineageTag: 866c33c1-08dc-451c-b78d-90b9557b0976
+
+	column Country
+		dataType: string
+		lineageTag: 3db5f000-c3e9-4789-8f60-e2e2a1d2d46f
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Continent
+		dataType: string
+		lineageTag: 7fcd8b14-802b-4263-833e-e9a4df64ad06
+		summarizeBy: none
+		sourceColumn: Continent
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesRegion
+		dataType: string
+		lineageTag: b9871581-db52-4fe3-b0eb-c59af70c0001
+		summarizeBy: none
+		sourceColumn: SalesRegion
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionalManager
+		dataType: string
+		lineageTag: 63ae9ad0-6e61-467e-ade6-0f98b350567c
+		summarizeBy: none
+		sourceColumn: RegionalManager
+
+		annotation SummarizationSetBy = Automatic
+
+	column ManagerEmail
+		dataType: string
+		lineageTag: 53fbb68d-590b-49b6-a6f5-af5139e80b45
+		summarizeBy: none
+		sourceColumn: ManagerEmail
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Regions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Regions.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"Country", type text}, {"Continent", type text}, {"SalesRegion", type text}, {"RegionalManager", type text}, {"ManagerEmail", type text}}, "en-US")
+				in
+				    ChangedTypes
+
+	annotation PBI_ResultType = Table
+
